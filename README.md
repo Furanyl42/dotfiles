@@ -24,6 +24,29 @@ dotfiles/
 
 ---
 
+🚀 Quick Start (Automated Setup)
+
+If you want to set up everything automatically—including fetching Neovim (no-sudo AppImage fallback), installing JetBrainsMono Nerd Font, and symlinking all dotfiles—simply run the automated setup script:
+Bash
+
+# 1. Clone your dotfiles repository
+git clone https://github.com/Furanyl42/dotfiles.git ~/dotfiles
+
+# 2. Make the script executable and run it
+cd ~/dotfiles
+chmod +x install.sh
+./install.sh
+
+    Note for restricted / school computers:
+
+    The script automatically detects if you lack sudo privileges or GNU Stow, falling back to local user installations (~/.local/bin, ~/.local/share/fonts) and manual symlinks (ln -snf).
+
+🛠️ Manual Installation Steps
+
+(If you prefer to set up your environment manually step-by-step, follow the detailed instructions below...)
+
+---
+
 ## 🚀 Installation Guide
 
 Choose the option that fits your environment:
