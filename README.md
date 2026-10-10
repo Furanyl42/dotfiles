@@ -1,10 +1,10 @@
-[github_readme(1).md](https://github.com/user-attachments/files/33270270/github_readme.1.md)
+[github_readme(2).md](https://github.com/user-attachments/files/33270948/github_readme.2.md)
 # 🛠️ Dotfiles
 
-Personal development environment configuration files managed with [GNU Stow](https://www.gnu.org/software/stow/) (or native symlinks).
+Personal cross-machine development environment managed with [GNU Stow](https://www.gnu.org/software/stow/) (or native `ln -snf` symlinks).
 
 Includes custom configurations for:
-- ⚡ **Neovim** (LazyVim, Neovim ≥ 0.12)
+- ⚡ **Neovim** (LazyVim)
 - 🖥️ **tmux**
 - 🐱 **Kitty Terminal**
 
@@ -17,16 +17,38 @@ dotfiles/
 ├── nvim/
 │   └── .config/nvim/          # Neovim / LazyVim configurations
 ├── kitty/
-│   └── .config/kitty/         # Kitty terminal configurations
-└── tmux/
-    └── .tmux.conf             # tmux configuration file
+│   └── .config/kitty/         # Kitty terminal configurations & theme
+│       ├── kitty.conf
+│       └── tokyo-night.conf
+├── tmux/
+│   └── .tmux.conf             # tmux configuration file
+└── install.sh                 # Automated setup script
 ```
 
 ---
 
-## 🚀 Installation Guide
+## 🚀 Quick Start (Automated Setup)
 
-Choose the option that fits your environment:
+If you want to set up everything automatically—including fetching **Neovim** (no-sudo AppImage fallback), installing **JetBrainsMono Nerd Font**, and symlinking all **dotfiles**—simply run the setup script:
+
+```bash
+# 1. Clone your dotfiles repository
+git clone https://github.com/Furanyl42/dotfiles.git ~/dotfiles
+
+# 2. Make the script executable and run it
+cd ~/dotfiles
+chmod +x install.sh
+./install.sh
+```
+
+> **Note for restricted / school computers:**  
+> The script automatically detects if you lack `sudo` privileges or GNU Stow, falling back to local user installations (`~/.local/bin`, `~/.local/share/fonts`) and manual symlinks (`ln -snf`).
+
+---
+
+## 🛠️ Manual Installation Guide
+
+If you prefer to set up your environment manually step-by-step, choose the option that fits your environment:
 
 - **Option A:** Standard Setup (Root/Sudo Access)
 - **Option B:** Restricted Setup (No Sudo / School Computer)
@@ -38,22 +60,22 @@ Choose the option that fits your environment:
 #### 1. Install Prerequisites
 Ensure `git` and `stow` are installed on the machine:
 
-* **Ubuntu/Debian:**
+- **Ubuntu/Debian:**
   ```bash
   sudo apt update && sudo apt install -y git stow build-essential
   ```
-* **Arch Linux:**
+- **Arch Linux:**
   ```bash
   sudo pacman -S --needed git stow base-devel
   ```
-* **macOS (Homebrew):**
+- **macOS (Homebrew):**
   ```bash
   brew install git stow
   ```
 
 #### 2. Clone Repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
+git clone https://github.com/Furanyl42/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
@@ -86,13 +108,13 @@ chmod +x nvim-linux-x86_64.appimage
 mv nvim-linux-x86_64.appimage ~/.local/bin/nvim
 
 # Add ~/.local/bin to your PATH (add to ~/.bashrc or ~/.zshrc)
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
 ```
 
 #### 2. Clone Repository
 ```bash
-git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/dotfiles
+git clone https://github.com/Furanyl42/dotfiles.git ~/dotfiles
 ```
 
 #### 3. Create Symlinks Manually (`ln -snf`)
