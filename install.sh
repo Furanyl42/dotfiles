@@ -22,6 +22,22 @@ mkdir -p "$HOME/.config"
 export PATH="$BIN_DIR:$PATH"
 
 # -----------------------------------------------------------------------------
+# HELPER: BACKUP EXISTING NON-SYMLINK CONFIGS
+# -----------------------------------------------------------------------------
+backup_if_exists() {
+    local target="$1"
+
+    # If target exists and is NOT a symlink, back it up
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
+        local timestamp
+        timestamp=$(date +"%Y%m%d_%H%M%S")
+        local backup_path="${target}.bak.${timestamp}"
+        echo "    Backing up existing non-symlink target: $target -> $backup_path"
+        mv "$target" "$backup_path"
+    fi
+}
+
+# -----------------------------------------------------------------------------
 # STEP 1: INSTALL NEOVIM (NO-SUDO APPIMAGE FALLBACK)
 # -----------------------------------------------------------------------------
 echo ""
@@ -64,10 +80,15 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# STEP 3: SYMLINK DOTFILES (GNU STOW WITH MANUAL FALLBACK)
+# STEP 3: SYMLINK DOTFILES (GNU STOW WITH MANUAL FALLBACK & BACKUPS)
 # -----------------------------------------------------------------------------
 echo ""
 echo "==> Symlinking configuration files..."
+
+# Backup existing unlinked files/folders before linking/stowing
+backup_if_exists "$HOME/.config/nvim"
+backup_if_exists "$HOME/.config/kitty"
+backup_if_exists "$HOME/.tmux.conf"
 
 if command -v stow >/dev/null 2>&1; then
     echo "    GNU Stow found. Applying stowed packages..."
