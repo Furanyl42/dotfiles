@@ -22,18 +22,21 @@ mkdir -p "$HOME/.config"
 export PATH="$BIN_DIR:$PATH"
 
 # -----------------------------------------------------------------------------
-# HELPER: BACKUP EXISTING NON-SYMLINK CONFIGS
+# HELPER: BACKUP EXISTING NON-SYMLINK CONFIGS & CLEAN BROKEN SYMLINKS
 # -----------------------------------------------------------------------------
 backup_if_exists() {
     local target="$1"
 
-    # If target exists and is NOT a symlink, back it up
-    if [ -e "$target" ] && [ ! -L "$target" ]; then
-        local timestamp
-        timestamp=$(date +"%Y%m%d_%H%M%S")
-        local backup_path="${target}.bak.${timestamp}"
-        echo "    Backing up existing non-symlink target: $target -> $backup_path"
-        mv "$target" "$backup_path"
+    # Check if target exists OR is a (potentially broken) symlink
+    if [ -e "$target" ] || [ -L "$target" ]; then
+        # If it's a real directory/file (not a symlink), back it up
+        if [ ! -L "$target" ]; then
+            local timestamp
+            timestamp=$(date +"%Y%m%d_%H%M%S")
+            local backup_path="${target}.bak.${timestamp}"
+            echo "    Backing up existing non-symlink target: $target -> $backup_path"
+            mv "$target" "$backup_path"
+        fi
     fi
 }
 
@@ -93,7 +96,7 @@ backup_if_exists "$HOME/.tmux.conf"
 if command -v stow >/dev/null 2>&1; then
     echo "    GNU Stow found. Applying stowed packages..."
     cd "$DOTFILES_DIR"
-    stow -R nvim kitty tmux
+    stow -t "$HOME" -R nvim kitty tmux
     echo "    Stowed: nvim, kitty, tmux"
 else
     echo "    GNU Stow not found. Falling back to manual symlinking (ln -snf)..."
