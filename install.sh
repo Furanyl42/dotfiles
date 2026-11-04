@@ -121,7 +121,23 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# STEP 4: SHELL ENVIRONMENT PATH CHECK
+# STEP 4: PRE-CLONE ESSENTIAL NEOVIM PLUGINS
+# -----------------------------------------------------------------------------
+echo ""
+echo "==> Setting up pre-installed Neovim plugins..."
+
+LAZY_PLUGINS_DIR="$HOME/.local/share/nvim/lazy"
+mkdir -p "$LAZY_PLUGINS_DIR"
+
+if [ ! -d "$LAZY_PLUGINS_DIR/42-header.nvim" ]; then
+    echo "    Cloning 42-header.nvim into $LAZY_PLUGINS_DIR..."
+    git clone https://github.com/tigran-sargsyan-w/42-header.nvim.git "$LAZY_PLUGINS_DIR/42-header.nvim"
+else
+    echo "    42-header.nvim already exists, skipping."
+fi
+
+# -----------------------------------------------------------------------------
+# STEP 5: SHELL ENVIRONMENT PATH CHECK
 # -----------------------------------------------------------------------------
 echo ""
 echo "=========================================="
