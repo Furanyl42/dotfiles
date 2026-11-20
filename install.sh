@@ -121,19 +121,44 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# STEP 4: PRE-CLONE ESSENTIAL NEOVIM PLUGINS
+# STEP 4: PRE-INSTALL 42-HEADER.NVIM
 # -----------------------------------------------------------------------------
 echo ""
-echo "==> Setting up pre-installed Neovim plugins..."
+echo "==> Setting up 42-header.nvim..."
 
 LAZY_PLUGINS_DIR="$HOME/.local/share/nvim/lazy"
+PLUGIN_DIR="$LAZY_PLUGINS_DIR/42-header.nvim"
+PLUGIN_REPO="https://github.com/tigran-sargsyan-w/42-header.nvim.git"
+
 mkdir -p "$LAZY_PLUGINS_DIR"
 
-if [ ! -d "$LAZY_PLUGINS_DIR/42-header.nvim" ]; then
-    echo "    Cloning 42-header.nvim into $LAZY_PLUGINS_DIR..."
-    git clone https://github.com/tigran-sargsyan-w/42-header.nvim.git "$LAZY_PLUGINS_DIR/42-header.nvim"
+# Check if the plugin is correctly installed
+if [ -f "$PLUGIN_DIR/lua/42header.lua" ]; then
+    echo "    42-header.nvim is already installed."
 else
-    echo "    42-header.nvim already exists, skipping."
+    # Remove incomplete installation if present
+    if [ -d "$PLUGIN_DIR" ]; then
+        echo "    Removing incomplete installation..."
+        rm -rf "$PLUGIN_DIR"
+    fi
+
+    echo "    Cloning 42-header.nvim..."
+
+    if ! command -v git >/dev/null 2>&1; then
+        echo "    ERROR: Git is required to install 42-header.nvim."
+        exit 1
+    fi
+
+    git clone "$PLUGIN_REPO" "$PLUGIN_DIR"
+
+    # Verify installation
+    if [ ! -f "$PLUGIN_DIR/lua/42header.lua" ]; then
+        echo "    ERROR: Plugin installation failed or is incomplete."
+        rm -rf "$PLUGIN_DIR"
+        exit 1
+    fi
+
+    echo "    42-header.nvim successfully installed!"
 fi
 
 # -----------------------------------------------------------------------------
