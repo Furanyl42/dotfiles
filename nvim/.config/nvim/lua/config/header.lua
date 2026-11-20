@@ -1,11 +1,15 @@
--- Ajoute le dossier du plugin au runtime de Neovim
+-- Add 42-header.nvim to Neovim's runtime path
 vim.opt.rtp:append(vim.fn.stdpath("data") .. "/lazy/42header.nvim")
 
--- Configuration du plugin
+-- Configuration
 require("42header").setup({
-  default_user = os.getenv("USER") or "student",
-  default_mail = os.getenv("MAIL") or "student@student.42.fr",
+    user = os.getenv("USER") or "student",
+    mail = os.getenv("MAIL") or "student@student.42.fr",
+    default_map = false,
+    auto_update = true,
 })
 
--- Raccourci clavier F1
-vim.keymap.set("n", "<F1>", "<cmd>Stdheader<CR>", { desc = "Insérer le header 42" })
+-- F1 shortcut
+vim.keymap.set("n", "<F1>", "<cmd>Stdheader<CR>", {
+    desc = "Insert 42 header",
+})
